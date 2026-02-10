@@ -1,0 +1,12 @@
+{
+  "sources": [
+    "/home/novrus",
+    "/etc"
+  ],
+  "exclude": [
+    "/home/novrus/.cache",
+    "/home/novrus/.local/share/Trash"
+  ],
+  "destination": "/mnt/backup/linux-mint",
+  "log_file": "/home/ghost/backup/logs/backup.log"
+}
