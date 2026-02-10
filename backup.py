@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 import sys
+import tarfile
 
 CONFIG_PATH = Path.home() / "backup/config.json"
 
@@ -19,6 +20,13 @@ def setup_logging(log_file):
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
+
+def archive_builds(build_dir, output_dir):
+    timestamp = datetime.now().strftime("%Y-%m-%d")
+    archive_path = Path(output_dir) / f"builds_{timestamp}.tar.gz"
+
+    with tarfile.open(archive_path, "w:gz") as tar:
+        tar.add(build_dir, arcname=Path(build_dir).name)
 
 def run_backup(sources, destination, exclude):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
