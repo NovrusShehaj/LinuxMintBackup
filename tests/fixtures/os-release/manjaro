@@ -1,0 +1,5 @@
+NAME="Manjaro Linux"
+ID=manjaro
+ID_LIKE="arch"
+PRETTY_NAME="Manjaro Linux"
+VERSION_ID="24.0"

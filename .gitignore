@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+.env.*
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Tooling
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Project outputs
+logs/
+*.log
+*.zip
+*.zip.partial
+osbackup-archives/
+partial-*/
+
+# Local config / secrets
+config.json
+credentials.json
+*.pem
+id_rsa
+id_ed25519
+
+# Backup data that must never be committed
+/backups/

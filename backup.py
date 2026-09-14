@@ -1,80 +1,22 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
+"""Deprecated compatibility shim. Use `osbackup` or `python3 -m operatingsystembackup`."""
 
-import subprocess
-import json
-import logging
-from datetime import datetime
-from pathlib import Path
+from __future__ import annotations
+
 import sys
-import tarfile
+from pathlib import Path
 
-CONFIG_PATH = Path.home() / "backup/config.json"
+_SRC = Path(__file__).resolve().parent / "src"
+if _SRC.is_dir() and str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 
-def load_config():
-    with open(CONFIG_PATH) as f:
-        return json.load(f)
+print(
+    "OperatingSystemBackup: python3 backup.py is deprecated; use osbackup or "
+    "python3 -m operatingsystembackup",
+    file=sys.stderr,
+)
 
-def setup_logging(log_file):
-    logging.basicConfig(
-        filename=log_file,
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s"
-    )
-
-def archive_builds(build_dir, output_dir):
-    timestamp = datetime.now().strftime("%Y-%m-%d")
-    archive_path = Path(output_dir) / f"builds_{timestamp}.tar.gz"
-
-    with tarfile.open(archive_path, "w:gz") as tar:
-        tar.add(build_dir, arcname=Path(build_dir).name)
-
-def run_backup(sources, destination, exclude):
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    dest_path = Path(destination) / timestamp
-    dest_path.mkdir(parents=True, exisit_ok=True)
-
-
-    cmd = [
-        "rsync",
-        "-aAx",
-        "--delete",
-        "--numeric-ids",
-        "--link-dest", f"{Path(destination)}/latest"
-    ]
-
-    for e in exclude:
-        cmd.extend(["--exclude", e])
-
-    cmd.extend(source)
-    cmd.append(str(dest_path))
-
-    logging.info("Running rsync command")
-    logging.info(" ".join(cmd))
-
-    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-    if result.returncode != 0:
-        logging.error(result.stderr)
-        sys.exit(1)
-
-    # Update "latest" symlink
-    latest = Path(destination) / "latest"
-    if latest.exists() or latest.is_symlink():
-        latest.unlink()
-    latest.symlink_to(dest_path)
-
-    logging.info("Backup completed sucessfully")
-
-def main():
-    config = load_config()
-    setup_logging(config["log_file"])
-    run_backup(
-        config["sources"],
-        config["destination"],
-        config["exclude"]
-    )
-
+from operatingsystembackup.cli import main  # noqa: E402
 
 if __name__ == "__main__":
-    main()
-
+    raise SystemExit(main())

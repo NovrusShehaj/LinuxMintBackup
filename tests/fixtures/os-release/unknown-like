@@ -1,0 +1,5 @@
+NAME="Example OS"
+ID=exampleos
+ID_LIKE="ubuntu debian"
+PRETTY_NAME="Example OS"
+VERSION_ID="1"
